@@ -53,5 +53,7 @@ export default function CategoryForm() {
         Add
       </Button>
     </form>
+
+
   )
 }

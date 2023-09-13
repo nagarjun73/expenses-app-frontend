@@ -28,5 +28,6 @@ export default function ExpenseTable(props) {
         </TableBody>
       </Table>
     </TableContainer>
+
   )
 }

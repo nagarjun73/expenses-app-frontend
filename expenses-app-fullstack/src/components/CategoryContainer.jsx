@@ -7,6 +7,7 @@ export default function CategoryContainer() {
     <div style={{ display: "flex", flexDirection: "row" }}>
       <CategoryList />
       <CategoryForm />
+
     </div>
   )
 }

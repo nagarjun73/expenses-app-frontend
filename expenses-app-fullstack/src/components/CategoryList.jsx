@@ -41,5 +41,6 @@ export default function CategoryList() {
         })}
       </List>
     </Card >
+
   )
 }

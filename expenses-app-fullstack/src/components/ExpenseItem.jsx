@@ -13,5 +13,6 @@ export default function ExpenseItem(props) {
       <TableCell>{ele.expenseDate}</TableCell>
       <TableCell>{cat.categories.find((els) => els._id == ele.categoryId).name}</TableCell>
     </TableRow>
+
   )
 }

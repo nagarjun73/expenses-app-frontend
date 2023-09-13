@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useContext, createContext } from 'react'
+import {useEffect, useReducer, useContext, createContext } from 'react'
 import CategoryContainer from './components/CategoryContainer'
 import Statistics from './components/Statistics'
 import ExpenseContainer from './components/ExpenseContainer'
@@ -23,10 +23,10 @@ function reducerCat(state, action) {
   }
 }
 
-function reducerExp(state, action) {
-  switch (action.type) {
-    case "FETCH_EXPENSES": {
-      return { ...state, expenses: [...action.payload] }
+function reducerExp(state, action){
+  switch(action.type){
+    case "FETCH_EXPENSES":{
+      return{...state, expenses:[...action.payload]}
     }
   }
 }
