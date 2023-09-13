@@ -1,29 +1,33 @@
 import { useContext } from "react"
-import {ExpenseContext } from "../App"
+import { ExpenseContext } from "../App"
 import ExpenseItem from "./ExpenseItem"
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
-export default function ExpenseTable(props){
 
-  const{exp, expDispatch} = useContext(ExpenseContext)
+export default function ExpenseTable(props) {
+
+  const { exp, expDispatch } = useContext(ExpenseContext)
   console.log(exp)
 
-  return(
-    <div>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          {exp.expenses.map((ele)=>{
-            return <ExpenseItem key={ele._id} ele={ele}/>
+
+  return (
+    <TableContainer component={Paper} elevation={3}>
+      <Table sx={{ minWidth: 650 }} aria-label="a dense table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Title</TableCell>
+            <TableCell>Amount</TableCell>
+            <TableCell>Date</TableCell>
+            <TableCell>Category</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {exp.expenses.map((ele) => {
+            return <ExpenseItem key={ele._id} ele={ele} />
           })}
-        </tbody>
-      </table>
-    </div>
+        </TableBody>
+      </Table>
+    </TableContainer>
+
   )
 }

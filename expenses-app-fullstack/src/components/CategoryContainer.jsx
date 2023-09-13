@@ -1,12 +1,13 @@
 import CategoryList from './CategoryList'
 import CategoryForm from './CategoryForm'
 
-export default function CategoryContainer(){
+export default function CategoryContainer() {
 
-  return(
-    <div>
-      <CategoryList/>
-      <CategoryForm/>
+  return (
+    <div style={{ display: "flex", flexDirection: "row" }}>
+      <CategoryList />
+      <CategoryForm />
+
     </div>
   )
 }
