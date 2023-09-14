@@ -1,4 +1,4 @@
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 import axios from 'axios'
 import { CategoryContext } from "../App"
 import Box from '@mui/material/Box';
@@ -9,29 +9,37 @@ export default function CategoryForm() {
   const [name, setName] = useState('')
   const { cat, catDispatch } = useContext(CategoryContext)
 
+  useEffect(() => {
+    if (Object.keys(cat.editCat).length !== 0) {
+      setName(cat.editCat.name)
+    } else {
+      setName('')
+    }
+  }, [cat.editCat])
+
   function catFormSubmitHandle(e) {
     e.preventDefault()
     const catObj = { name: name }
     axios.post('http://localhost:3077/api/categories', catObj)
       .then((res) => {
         catDispatch({ type: 'ADD_CATEGORY', payload: res.data })
+        setName('')
       })
       .catch((err) => {
         console.log(err)
       })
   }
 
+  async function editCatHandle() {
+    try {
+      const res = await axios.put(`http://localhost:3077/api/categories/${cat.editCat._id}`, { name: name })
+      catDispatch({ type: "EDIT_CAT", payload: res.data })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return (
-    // <div>
-    //   <h1>Add Category</h1>
-    //   <form onSubmit={catFormSubmitHandle}>
-    //     <label>Name</label>
-    //     <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-
-    //     <input type="submit" />
-    //   </form>
-    // </div>
-
     <form onSubmit={catFormSubmitHandle} style={{ width: '40vw' }}>
       <Box
         sx={{
@@ -47,11 +55,18 @@ export default function CategoryForm() {
           onInput={(e) => setName(e.target.value)}
         />
       </Box>
-      <Button
-        variant="contained"
-        type="submit">
-        Add
-      </Button>
+      {Object.keys(cat.editCat).length !== 0 ?
+        <Button
+          variant="contained"
+          onClick={editCatHandle}>
+          update
+        </Button> :
+        <Button
+          variant="contained"
+          type="submit">
+          Add
+        </Button>
+      }
     </form>
 
 

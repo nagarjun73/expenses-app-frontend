@@ -1,4 +1,4 @@
-import {useEffect, useReducer, useContext, createContext } from 'react'
+import { useEffect, useReducer, useContext, createContext } from 'react'
 import CategoryContainer from './components/CategoryContainer'
 import Statistics from './components/Statistics'
 import ExpenseContainer from './components/ExpenseContainer'
@@ -8,32 +8,45 @@ import axios from 'axios'
 export const CategoryContext = createContext()
 export const ExpenseContext = createContext()
 
-
 function reducerCat(state, action) {
   switch (action.type) {
     case "ADD_CATEGORY": {
-      return { ...state, categories: [action.payload, ...state.categories] }
+      return { ...state, categories: [...state.categories, action.payload] }
     }
     case "FETCH_CATEGORIES": {
       return { ...state, categories: [...action.payload] }
     }
     case "DELETE_CATEGORY": {
-      return { ...state, categories: [state.categories.filter((ele) => ele._id !== action.payload)] }
+      return { ...state, categories: state.categories.filter((ele) => ele._id !== action.payload._id) }
+    }
+    case "UPDATE_EDIT_FORM": {
+      return { ...state, editCat: action.payload }
+    }
+    case "EDIT_CAT": {
+      const finCat = state.categories.map((ele) => {
+        if (ele._id == action.payload._id) {
+          return action.payload
+        } else {
+          return ele
+        }
+      })
+      return { ...state, categories: finCat, editCat: {} }
     }
   }
 }
 
-function reducerExp(state, action){
-  switch(action.type){
-    case "FETCH_EXPENSES":{
-      return{...state, expenses:[...action.payload]}
+function reducerExp(state, action) {
+  switch (action.type) {
+    case "FETCH_EXPENSES": {
+      return { ...state, expenses: [...action.payload] }
     }
   }
 }
 
 function App() {
   const initialStateCat = {
-    categories: []
+    categories: [],
+    editCat: {}
   }
 
   const initialStateExp = {
@@ -54,7 +67,7 @@ function App() {
         .catch((err) => {
           console.log(err)
         })
-    })
+    }, [cat.categories])
 
     Promise.all(promisedRes)
       .then((res) => {
@@ -74,7 +87,7 @@ function App() {
         <ExpenseContext.Provider value={{ exp, expDispatch }}>
           <Statistics />
           <CategoryContainer />
-          <ExpenseContainer />
+          {/* <ExpenseContainer /> */}
           <Graph />
         </ExpenseContext.Provider>
       </CategoryContext.Provider>
