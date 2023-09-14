@@ -11,13 +11,26 @@ export const ExpenseContext = createContext()
 function reducerCat(state, action) {
   switch (action.type) {
     case "ADD_CATEGORY": {
-      return { ...state, categories: [action.payload, ...state.categories] }
+      return { ...state, categories: [...state.categories, action.payload] }
     }
     case "FETCH_CATEGORIES": {
       return { ...state, categories: [...action.payload] }
     }
     case "DELETE_CATEGORY": {
       return { ...state, categories: state.categories.filter((ele) => ele._id !== action.payload._id) }
+    }
+    case "UPDATE_EDIT_FORM": {
+      return { ...state, editCat: action.payload }
+    }
+    case "EDIT_CAT": {
+      const finCat = state.categories.map((ele) => {
+        if (ele._id == action.payload._id) {
+          return action.payload
+        } else {
+          return ele
+        }
+      })
+      return { ...state, categories: finCat, editCat: {} }
     }
   }
 }
@@ -32,7 +45,8 @@ function reducerExp(state, action) {
 
 function App() {
   const initialStateCat = {
-    categories: []
+    categories: [],
+    editCat: {}
   }
 
   const initialStateExp = {
