@@ -15,6 +15,7 @@ export default function CategoryForm() {
     axios.post('http://localhost:3077/api/categories', catObj)
       .then((res) => {
         catDispatch({ type: 'ADD_CATEGORY', payload: res.data })
+        setName('')
       })
       .catch((err) => {
         console.log(err)
@@ -22,16 +23,6 @@ export default function CategoryForm() {
   }
 
   return (
-    // <div>
-    //   <h1>Add Category</h1>
-    //   <form onSubmit={catFormSubmitHandle}>
-    //     <label>Name</label>
-    //     <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-
-    //     <input type="submit" />
-    //   </form>
-    // </div>
-
     <form onSubmit={catFormSubmitHandle} style={{ width: '40vw' }}>
       <Box
         sx={{

@@ -1,4 +1,4 @@
-import {useEffect, useReducer, useContext, createContext } from 'react'
+import { useEffect, useReducer, useContext, createContext } from 'react'
 import CategoryContainer from './components/CategoryContainer'
 import Statistics from './components/Statistics'
 import ExpenseContainer from './components/ExpenseContainer'
@@ -7,7 +7,6 @@ import axios from 'axios'
 
 export const CategoryContext = createContext()
 export const ExpenseContext = createContext()
-
 
 function reducerCat(state, action) {
   switch (action.type) {
@@ -18,15 +17,15 @@ function reducerCat(state, action) {
       return { ...state, categories: [...action.payload] }
     }
     case "DELETE_CATEGORY": {
-      return { ...state, categories: [state.categories.filter((ele) => ele._id !== action.payload)] }
+      return { ...state, categories: state.categories.filter((ele) => ele._id !== action.payload._id) }
     }
   }
 }
 
-function reducerExp(state, action){
-  switch(action.type){
-    case "FETCH_EXPENSES":{
-      return{...state, expenses:[...action.payload]}
+function reducerExp(state, action) {
+  switch (action.type) {
+    case "FETCH_EXPENSES": {
+      return { ...state, expenses: [...action.payload] }
     }
   }
 }
@@ -54,7 +53,7 @@ function App() {
         .catch((err) => {
           console.log(err)
         })
-    })
+    }, [cat.categories])
 
     Promise.all(promisedRes)
       .then((res) => {
@@ -74,7 +73,7 @@ function App() {
         <ExpenseContext.Provider value={{ exp, expDispatch }}>
           <Statistics />
           <CategoryContainer />
-          <ExpenseContainer />
+          {/* <ExpenseContainer /> */}
           <Graph />
         </ExpenseContext.Provider>
       </CategoryContext.Provider>
