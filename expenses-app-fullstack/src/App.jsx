@@ -4,6 +4,7 @@ import Statistics from './components/Statistics'
 import ExpenseContainer from './components/ExpenseContainer'
 import Graph from './components/Graph'
 import axios from 'axios'
+import Stack from '@mui/material/Stack'
 
 export const CategoryContext = createContext()
 export const ExpenseContext = createContext()
@@ -39,6 +40,9 @@ function reducerExp(state, action) {
   switch (action.type) {
     case "FETCH_EXPENSES": {
       return { ...state, expenses: [...action.payload] }
+    }
+    case "ADD_EXPENSES": {
+      return { ...state, expenses: [...state.expenses, action.payload] }
     }
   }
 }
@@ -78,17 +82,18 @@ function App() {
       .catch((err) => {
         console.log(err)
       })
-
   }, [])
 
   return (
     <div>
       <CategoryContext.Provider value={{ cat, catDispatch }}>
         <ExpenseContext.Provider value={{ exp, expDispatch }}>
-          <Statistics />
-          <CategoryContainer />
-          {/* <ExpenseContainer /> */}
-          <Graph />
+          <Stack spacing={5}>
+            <Statistics />
+            <CategoryContainer />
+            <ExpenseContainer />
+            <Graph />
+          </Stack>
         </ExpenseContext.Provider>
       </CategoryContext.Provider>
     </div>
