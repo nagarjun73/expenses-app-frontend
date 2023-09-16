@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemText, ListSubheader, Card, Button } from "@mui/material"
+import { ListItem, ListItemText, Button, ButtonGroup } from "@mui/material"
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit'
 import { CategoryContext } from "../App";
@@ -26,14 +26,14 @@ export default function CategoryItem(props) {
     <div>
       <ListItem >
         <ListItemText primary={catEle.name} />
-        <div style={{ display: 'flex', justifyContent: "space-between" }}>
-          <Button variant="contained" startIcon={<EditIcon />} onClick={editBtnHandle}>
+        <ButtonGroup variant="contained" aria-label="outlined primary button group" >
+          <Button startIcon={<EditIcon />} onClick={editBtnHandle}>
             Edit
           </Button>
-          <Button variant="contained" startIcon={<DeleteIcon />} onClick={deleteBtnHandle}>
+          <Button startIcon={<DeleteIcon />} onClick={deleteBtnHandle}>
             Delete
           </Button>
-        </div>
+        </ButtonGroup>
       </ListItem>
     </div>
   )

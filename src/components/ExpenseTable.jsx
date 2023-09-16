@@ -22,6 +22,7 @@ export default function ExpenseTable(props) {
             <TableCell>Amount</TableCell>
             <TableCell>Date</TableCell>
             <TableCell>Category</TableCell>
+            <TableCell>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

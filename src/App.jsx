@@ -44,6 +44,9 @@ function reducerExp(state, action) {
     case "ADD_EXPENSES": {
       return { ...state, expenses: [...state.expenses, action.payload] }
     }
+    case "DELETE_EXPENSES": {
+      return { ...state, expenses: state.expenses.filter((ele) => ele._id !== action.payload._id) }
+    }
   }
 }
 
