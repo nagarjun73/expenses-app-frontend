@@ -16,6 +16,7 @@ export default function ExpenseForm() {
   const [selectedCat, setSelectedCat] = useState('')
   const [date, setDate] = useState('')
   const [description, setDescription] = useState('')
+  const [errors, setErrors] = useState({})
 
   async function addExpenseHandle(e) {
     try {
@@ -30,17 +31,36 @@ export default function ExpenseForm() {
       const res = await axios.post(`http://localhost:3077/api/expenses`, expObj)
       console.log(res)
       expDispatch({ type: "ADD_EXPENSES", payload: res.data })
+      setTitle('')
+      setSelectedCat('')
+      setAmount('')
+      setDescription('')
     } catch (e) {
-      console.log(e)
+      const err = e.response.data.errors
+      const errors = err.reduce((acc, item) => {
+        const path = item.path;
+        const msg = item.msg;
+        if (acc[path]) {
+          acc[path] += `, ${msg}`;
+        } else {
+          acc[path] = msg;
+        }
+        return acc;
+      }, {});
+      console.log(errors);
+      setErrors(errors)
     }
   }
 
   return (
-    <div>
+    <Box sx={{
+      minWidth: '25vw',
+      maxWidth: '25vw'
+    }}>
       <form onSubmit={addExpenseHandle}>
         <Stack spacing={2}>
           <TextField id="outlined-basic" label="Title" variant="outlined" value={title} onChange={(e) => setTitle(e.target.value)} />
-          <FormHelperText>hh</FormHelperText>
+          {errors.title && <FormHelperText>{errors.title}</FormHelperText>}
 
           <FormControl >
             <InputLabel id="demo-simple-select-label">Category</InputLabel>
@@ -57,17 +77,21 @@ export default function ExpenseForm() {
               })}
             </Select>
           </FormControl>
+          {errors.categoryId && <FormHelperText>{errors.categoryId}</FormHelperText>}
 
           <TextField id="outlined-basic" label="amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" variant="outlined" />
+          {errors.amount && <FormHelperText>{errors.amount}</FormHelperText>}
 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker onChange={setDate} />
           </LocalizationProvider>
+          {errors.expenseDate && <FormHelperText>{errors.expenseDate}</FormHelperText>}
 
           <Textarea minRows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Add description...." />
+          {errors.description && <FormHelperText>{errors.description}</FormHelperText>}
           <Button type="submit" variant="contained">Add Expense</Button>
         </Stack>
       </form>
-    </div>
+    </Box >
   )
 }

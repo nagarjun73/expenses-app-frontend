@@ -1,13 +1,13 @@
 import { useState, useContext, useEffect } from "react"
 import axios from 'axios'
 import { CategoryContext } from "../App"
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Button } from "@mui/material";
+import { Button, FormHelperText, Stack } from "@mui/material";
 
 export default function CategoryForm() {
-  const [name, setName] = useState('')
   const { cat, catDispatch } = useContext(CategoryContext)
+  const [name, setName] = useState('')
+  const [errors, setErrors] = useState({})
 
   useEffect(() => {
     if (Object.keys(cat.editCat).length !== 0) {
@@ -26,7 +26,7 @@ export default function CategoryForm() {
         setName('')
       })
       .catch((err) => {
-        console.log(err)
+        setErrors(err.response.data.errors[0])
       })
   }
 
@@ -41,11 +41,10 @@ export default function CategoryForm() {
 
   return (
     <form onSubmit={catFormSubmitHandle} style={{ width: '40vw' }}>
-      <Box
+      <Stack spacing={2}
         sx={{
           display: 'flex',
-          alignItems: 'center',
-          '& > :not(style)': { m: 1 },
+          alignItems: 'start',
         }}
       >
         <TextField
@@ -54,19 +53,20 @@ export default function CategoryForm() {
           value={name}
           onInput={(e) => setName(e.target.value)}
         />
-      </Box>
-      {Object.keys(cat.editCat).length !== 0 ?
-        <Button
-          variant="contained"
-          onClick={editCatHandle}>
-          update
-        </Button> :
-        <Button
-          variant="contained"
-          type="submit">
-          Add
-        </Button>
-      }
+        {errors.msg && <FormHelperText>{errors.msg}</FormHelperText>}
+        {Object.keys(cat.editCat).length !== 0 ?
+          <Button
+            variant="contained"
+            onClick={editCatHandle}>
+            update
+          </Button> :
+          <Button
+            variant="contained"
+            type="submit">
+            Add
+          </Button>
+        }
+      </Stack>
     </form>
 
 
