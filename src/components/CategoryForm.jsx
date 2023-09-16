@@ -53,7 +53,7 @@ export default function CategoryForm() {
           value={name}
           onInput={(e) => setName(e.target.value)}
         />
-        {errors.msg && <FormHelperText>{errors.msg}</FormHelperText>}
+        {errors.msg && <FormHelperText error>{errors.msg}</FormHelperText>}
         {Object.keys(cat.editCat).length !== 0 ?
           <Button
             variant="contained"

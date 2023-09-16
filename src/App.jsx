@@ -5,6 +5,7 @@ import ExpenseContainer from './components/ExpenseContainer'
 import Graph from './components/Graph'
 import axios from 'axios'
 import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 
 export const CategoryContext = createContext()
 export const ExpenseContext = createContext()
@@ -109,6 +110,7 @@ function App() {
       <CategoryContext.Provider value={{ cat, catDispatch }}>
         <ExpenseContext.Provider value={{ exp, expDispatch }}>
           <Stack spacing={5}>
+            <Typography variant="h2" sx={{ display: "flex", justifyContent: "center" }}>Expense App</Typography>
             <Statistics />
             <CategoryContainer />
             <ExpenseContainer />

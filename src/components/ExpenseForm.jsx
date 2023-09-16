@@ -18,6 +18,7 @@ export default function ExpenseForm() {
   const [date, setDate] = useState(null)
   const [description, setDescription] = useState('')
   const [errors, setErrors] = useState({})
+  console.log(date)
 
   useEffect(() => {
     if (Object.keys(exp.editExp).length !== 0) {
@@ -42,8 +43,9 @@ export default function ExpenseForm() {
         amount: amount,
         description: description,
         categoryId: selectedCat,
-        expenseDate: new Date(date).toJSON()?.slice(0, 10)
+        expenseDate: date ? new Date(date).toJSON()?.slice(0, 10) : ''
       }
+      console.log(expObj)
 
       if (Object.keys(exp.editExp).length == 0) {
         const res = await axios.post(`http://localhost:3077/api/expenses`, expObj)
@@ -61,6 +63,7 @@ export default function ExpenseForm() {
       setDate(null)
     } catch (e) {
       const err = e.response.data.errors
+      console.log(err)
       const errors = err.reduce((acc, item) => {
         const path = item.path;
         const msg = item.msg;
@@ -84,7 +87,7 @@ export default function ExpenseForm() {
       <form onSubmit={expenseHandle}>
         <Stack spacing={2}>
           <TextField id="outlined-basic" label="Title" variant="outlined" value={title} onChange={(e) => setTitle(e.target.value)} />
-          {errors.title && <FormHelperText>{errors.title}</FormHelperText>}
+          {errors.title && <FormHelperText error>{errors.title}</FormHelperText>}
 
           <FormControl >
             <InputLabel id="demo-simple-select-label">Category</InputLabel>
@@ -95,24 +98,24 @@ export default function ExpenseForm() {
               label="Category"
               onChange={(e) => setSelectedCat(e.target.value)}
             >
-              <MenuItem value=""><em>None</em></MenuItem>
               {cat.categories.map((ele) => {
                 return <MenuItem key={ele._id} value={ele._id}>{ele.name}</MenuItem>
               })}
             </Select>
           </FormControl>
-          {errors.categoryId && <FormHelperText>{errors.categoryId}</FormHelperText>}
+          {errors.categoryId && <FormHelperText error>{errors.categoryId}</FormHelperText>}
 
           <TextField id="outlined-basic" label="amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" variant="outlined" />
-          {errors.amount && <FormHelperText>{errors.amount}</FormHelperText>}
+          {errors.amount && <FormHelperText error>{errors.amount}</FormHelperText>}
 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker value={date} onChange={(newValue) => setDate(newValue.$d)} />
+            <DatePicker value={date}
+              onChange={(newValue) => setDate(newValue.$d)} />
           </LocalizationProvider>
-          {errors.expenseDate && <FormHelperText>{errors.expenseDate}</FormHelperText>}
+          {errors.expenseDate && <FormHelperText error>{errors.expenseDate}</FormHelperText>}
 
           <Textarea minRows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Add description...." />
-          {errors.description && <FormHelperText>{errors.description}</FormHelperText>}
+          {errors.description && <FormHelperText error>{errors.description}</FormHelperText>}
           {Object.keys(exp.editExp).length == 0 ?
             <Button type="submit" variant="contained">Add Expense</Button> :
             <Button type="submit" variant="contained">update Expense</Button>
