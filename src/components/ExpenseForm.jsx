@@ -1,11 +1,12 @@
 import TextField from '@mui/material/TextField'
 import { FormControl, InputLabel, MenuItem, Select, Button, Stack, FormHelperText, Box } from '@mui/material'
 import { Textarea } from '@mui/joy'
-import { useContext, useReducer, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { CategoryContext, ExpenseContext } from '../App'
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from 'dayjs';
 import axios from 'axios'
 
 export default function ExpenseForm() {
@@ -14,11 +15,26 @@ export default function ExpenseForm() {
   const [title, setTitle] = useState('')
   const [amount, setAmount] = useState('')
   const [selectedCat, setSelectedCat] = useState('')
-  const [date, setDate] = useState('')
+  const [date, setDate] = useState(null)
   const [description, setDescription] = useState('')
   const [errors, setErrors] = useState({})
 
-  async function addExpenseHandle(e) {
+  useEffect(() => {
+    if (Object.keys(exp.editExp).length !== 0) {
+      setTitle(exp.editExp.title)
+      setAmount(exp.editExp.amount)
+      setDate(dayjs(new Date(exp.editExp.expenseDate)))
+      setSelectedCat(exp.editExp.categoryId)
+      setDescription(exp.editExp.description)
+    } else {
+      setTitle('')
+      setDescription('')
+      setAmount('')
+      setSelectedCat('')
+    }
+  }, [exp.editExp])
+
+  async function expenseHandle(e) {
     try {
       e.preventDefault()
       const expObj = {
@@ -26,15 +42,23 @@ export default function ExpenseForm() {
         amount: amount,
         description: description,
         categoryId: selectedCat,
-        expenseDate: new Date(date.$d).toJSON()?.slice(0, 10)
+        expenseDate: new Date(date).toJSON()?.slice(0, 10)
       }
-      const res = await axios.post(`http://localhost:3077/api/expenses`, expObj)
-      console.log(res)
-      expDispatch({ type: "ADD_EXPENSES", payload: res.data })
+
+      if (Object.keys(exp.editExp).length == 0) {
+        const res = await axios.post(`http://localhost:3077/api/expenses`, expObj)
+        console.log(res)
+        expDispatch({ type: "ADD_EXPENSES", payload: res.data })
+      } else {
+        const res = await axios.put(`http://localhost:3077/api/expenses/${exp.editExp._id}`, expObj)
+        console.log(res)
+        expDispatch({ type: "EDIT_EXPENSES", payload: res.data })
+      }
       setTitle('')
       setSelectedCat('')
       setAmount('')
       setDescription('')
+      setDate(null)
     } catch (e) {
       const err = e.response.data.errors
       const errors = err.reduce((acc, item) => {
@@ -57,7 +81,7 @@ export default function ExpenseForm() {
       minWidth: '25vw',
       maxWidth: '25vw'
     }}>
-      <form onSubmit={addExpenseHandle}>
+      <form onSubmit={expenseHandle}>
         <Stack spacing={2}>
           <TextField id="outlined-basic" label="Title" variant="outlined" value={title} onChange={(e) => setTitle(e.target.value)} />
           {errors.title && <FormHelperText>{errors.title}</FormHelperText>}
@@ -83,13 +107,16 @@ export default function ExpenseForm() {
           {errors.amount && <FormHelperText>{errors.amount}</FormHelperText>}
 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker onChange={setDate} />
+            <DatePicker value={date} onChange={(newValue) => setDate(newValue.$d)} />
           </LocalizationProvider>
           {errors.expenseDate && <FormHelperText>{errors.expenseDate}</FormHelperText>}
 
           <Textarea minRows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Add description...." />
           {errors.description && <FormHelperText>{errors.description}</FormHelperText>}
-          <Button type="submit" variant="contained">Add Expense</Button>
+          {Object.keys(exp.editExp).length == 0 ?
+            <Button type="submit" variant="contained">Add Expense</Button> :
+            <Button type="submit" variant="contained">update Expense</Button>
+          }
         </Stack>
       </form>
     </Box >

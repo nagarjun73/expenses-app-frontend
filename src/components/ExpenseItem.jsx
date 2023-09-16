@@ -5,12 +5,21 @@ import axios from 'axios'
 
 export default function ExpenseItem(props) {
   const { exp, expDispatch } = useContext(ExpenseContext)
-  const { ele } = props
+  const { expEle } = props
   const { cat, catDispatch } = useContext(CategoryContext)
+
+  async function editExpenseHandle() {
+    try {
+      console.log(expEle)
+      expDispatch({ type: "UPDATE_EXP_FORM", payload: expEle })
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   async function deleteExpensesHandle() {
     try {
-      const res = await axios.delete(`http://localhost:3077/api/expenses/${ele._id}`)
+      const res = await axios.delete(`http://localhost:3077/api/expenses/${expEle._id}`)
       expDispatch({ type: "DELETE_EXPENSES", payload: res.data })
     } catch (e) {
       console.log(e)
@@ -19,13 +28,13 @@ export default function ExpenseItem(props) {
 
   return (
     <TableRow>
-      <TableCell>{ele.title}</TableCell>
-      <TableCell>{ele.amount}</TableCell>
-      <TableCell>{ele.expenseDate?.slice(0, 10)}</TableCell>
-      <TableCell>{cat.categories.find((els) => els._id == ele.categoryId).name}</TableCell>
+      <TableCell>{expEle.title}</TableCell>
+      <TableCell>{expEle.amount}</TableCell>
+      <TableCell>{expEle.expenseDate?.slice(0, 10)}</TableCell>
+      <TableCell>{cat.categories.find((els) => els._id == expEle.categoryId).name}</TableCell>
       <TableCell>
         <ButtonGroup variant="contained" aria-label="outlined primary button group">
-          <Button>edit</Button>
+          <Button onClick={editExpenseHandle}>edit</Button>
           <Button onClick={deleteExpensesHandle}>delete</Button>
         </ButtonGroup>
       </TableCell>

@@ -27,7 +27,7 @@ export default function ExpenseTable(props) {
         </TableHead>
         <TableBody>
           {exp.expenses.map((ele) => {
-            return <ExpenseItem key={ele._id} ele={ele} />
+            return <ExpenseItem key={ele._id} expEle={ele} />
           })}
         </TableBody>
       </Table>

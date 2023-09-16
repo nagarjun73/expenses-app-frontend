@@ -44,6 +44,22 @@ function reducerExp(state, action) {
     case "ADD_EXPENSES": {
       return { ...state, expenses: [...state.expenses, action.payload] }
     }
+
+    case "UPDATE_EXP_FORM": {
+      return { ...state, editExp: action.payload }
+    }
+
+    case "EDIT_EXPENSES": {
+      const editedExp = state.expenses.map((ele) => {
+        if (ele._id == action.payload._id) {
+          return action.payload
+        } else {
+          return ele
+        }
+      })
+      return { ...state, expenses: editedExp, editExp: {} }
+    }
+
     case "DELETE_EXPENSES": {
       return { ...state, expenses: state.expenses.filter((ele) => ele._id !== action.payload._id) }
     }
@@ -57,7 +73,8 @@ function App() {
   }
 
   const initialStateExp = {
-    expenses: []
+    expenses: [],
+    editExp: {}
   }
 
   const [cat, catDispatch] = useReducer(reducerCat, initialStateCat)
