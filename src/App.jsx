@@ -83,7 +83,6 @@ function App() {
 
   const [cat, catDispatch] = useReducer(reducerCat, initialStateCat)
   const [exp, expDispatch] = useReducer(reducerExp, initialStateExp)
-  console.log(cat.categories)
 
   useEffect(() => {
     const promisedRes = ['categories', 'expenses'].map((ele) => {

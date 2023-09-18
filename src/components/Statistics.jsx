@@ -47,7 +47,6 @@ export default function Statistics() {
       const data = Object.keys(monthObj).map((key) => {
         return { name: key, amt: monthObj[key] }
       })
-      console.log(data)
       setData(data.slice(-3, data.length))
     }
   }, [exp.expenses])

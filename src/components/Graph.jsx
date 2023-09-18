@@ -38,7 +38,6 @@ const Graph = () => {
     }, {})
 
     const helperFun = ([name, arr]) => {
-      console.log(name, arr)
       const obj = { name: name }
       arr.forEach(ele => {
         obj[ele[0]] = ele[1]
