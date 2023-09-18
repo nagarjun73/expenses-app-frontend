@@ -21,7 +21,7 @@ export default function CategoryForm() {
 
   function catFormSubmitHandle(e) {
     e.preventDefault()
-    const catObj = { name: name }
+    const catObj = { name: name, color: color }
     axios.post('http://localhost:3077/api/categories', catObj)
       .then((res) => {
         catDispatch({ type: 'ADD_CATEGORY', payload: res.data })
