@@ -14,8 +14,10 @@ export default function CategoryForm() {
   useEffect(() => {
     if (Object.keys(cat.editCat).length !== 0) {
       setName(cat.editCat.name)
+      setColor(cat.editCat.color)
     } else {
       setName('')
+      setColor('')
     }
   }, [cat.editCat])
 
@@ -26,15 +28,27 @@ export default function CategoryForm() {
       .then((res) => {
         catDispatch({ type: 'ADD_CATEGORY', payload: res.data })
         setName('')
+        setColor('')
+        setErrors({})
       })
       .catch((err) => {
-        setErrors(err.response.data.errors[0])
+        const msgArr = err.response.data.errors.reduce((acc, item) => {
+          const path = item.path
+          const msg = item.msg
+          if (!acc[path]) {
+            acc[path] = msg
+          } else {
+            acc[path] += ` ${msg}`
+          }
+          return acc
+        }, {})
+        setErrors(msgArr)
       })
   }
 
   async function editCatHandle() {
     try {
-      const res = await axios.put(`http://localhost:3077/api/categories/${cat.editCat._id}`, { name: name })
+      const res = await axios.put(`http://localhost:3077/api/categories/${cat.editCat._id}`, { name: name, color: color })
       catDispatch({ type: "EDIT_CAT", payload: res.data })
     } catch (e) {
       console.log(e)
@@ -55,8 +69,10 @@ export default function CategoryForm() {
           value={name}
           onInput={(e) => setName(e.target.value)}
         />
-        {errors.msg && <FormHelperText error>{errors.msg}</FormHelperText>}
+        {errors.name && <FormHelperText error>{errors.name}</FormHelperText>}
         <MuiColorInput value={color} onChange={(newValue) => setColor(newValue)} />
+        {errors.color && <FormHelperText error>{errors.color}</FormHelperText>}
+
         {Object.keys(cat.editCat).length !== 0 ?
           <Button
             variant="contained"
