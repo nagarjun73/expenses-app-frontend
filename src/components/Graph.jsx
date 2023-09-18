@@ -8,6 +8,7 @@ const Graph = () => {
   const { exp, expDispatch } = useContext(ExpenseContext)
   const { cat, catDispatch } = useContext(CategoryContext)
   const [pieData, setPieData] = useState([])
+  const [barData, setBarData] = useState([])
 
   useEffect(() => {
     const data = cat.categories.map((ele) => {
@@ -23,40 +24,33 @@ const Graph = () => {
       }
     })
     setPieData(data)
+
+    const expSort = exp.expenses.sort((a, b) => new Date(a.expenseDate) - new Date(b.expenseDate))
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const monthObj = expSort.reduce((acc, item) => {
+      const monthName = months[new Date(item.expenseDate).getMonth()]
+      if (acc.hasOwnProperty(monthName)) {
+        acc[monthName].push([cat.categories.find((ele) => ele._id == item.categoryId).name, item.amount])
+      } else {
+        acc[monthName] = [[cat.categories.find((ele) => ele._id == item.categoryId).name, item.amount]]
+      }
+      return acc
+    }, {})
+
+    const helperFun = ([name, arr]) => {
+      console.log(name, arr)
+      const obj = { name: name }
+      arr.forEach(ele => {
+        obj[ele[0]] = ele[1]
+      })
+      return obj
+    }
+    const map = Object.entries(monthObj).map((ele) => {
+      return helperFun(ele)
+    })
+    setBarData(map)
   }, [cat.categories, exp.expenses])
 
-  const data = [
-    {
-      name: 'Page A',
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: 'Page B',
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: 'Page C',
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: 'Page D',
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: 'Page E',
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-  ];
 
   return (
     <Box>
@@ -82,6 +76,7 @@ const Graph = () => {
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
+              <Legend />
               <Tooltip />
             </PieChart>
           </ResponsiveContainer>
@@ -94,7 +89,7 @@ const Graph = () => {
             <BarChart
               width={500}
               height={300}
-              data={data}
+              data={barData}
               margin={{
                 top: 20,
                 right: 30,
@@ -107,8 +102,9 @@ const Graph = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="pv" stackId="a" fill="#8884d8" />
-              <Bar dataKey="uv" stackId="a" fill="#82ca9d" />
+              {cat.categories.map((ele, i) => {
+                return <Bar key={i} dataKey={ele.name} stackId="a" fill={ele.color} />
+              })}
             </BarChart>
           </ResponsiveContainer>
         </Box>
