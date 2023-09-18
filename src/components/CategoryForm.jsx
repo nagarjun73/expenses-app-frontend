@@ -3,10 +3,12 @@ import axios from 'axios'
 import { CategoryContext } from "../App"
 import TextField from '@mui/material/TextField';
 import { Button, FormHelperText, Stack } from "@mui/material";
+import { MuiColorInput } from 'mui-color-input'
 
 export default function CategoryForm() {
   const { cat, catDispatch } = useContext(CategoryContext)
   const [name, setName] = useState('')
+  const [color, setColor] = useState('')
   const [errors, setErrors] = useState({})
 
   useEffect(() => {
@@ -54,6 +56,7 @@ export default function CategoryForm() {
           onInput={(e) => setName(e.target.value)}
         />
         {errors.msg && <FormHelperText error>{errors.msg}</FormHelperText>}
+        <MuiColorInput value={color} onChange={(newValue) => setColor(newValue)} />
         {Object.keys(cat.editCat).length !== 0 ?
           <Button
             variant="contained"

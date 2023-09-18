@@ -1,7 +1,7 @@
 import { Card, CardContent, Stack, Typography } from '@mui/material'
 import { useContext, useEffect, useState, PureComponent } from 'react'
 import { CategoryContext, ExpenseContext } from '../App'
-import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip, CartesianGrid } from 'recharts';
 
 export default function Statistics() {
   const [totalAmt, setTotalAmt] = useState(0)
@@ -53,7 +53,7 @@ export default function Statistics() {
   }, [exp.expenses])
 
   return (
-    <Stack direction='row' justifyContent={'space-evenly'} sx={{ paddingTop: "10vh", width: '75vw' }}>
+    <Stack direction='row' justifyContent={'space-evenly'} sx={{ paddingTop: "10vh", }}>
       <Card sx={{ backgroundColor: 'primary.main', borderRadius: '10px', width: '20vw', }}>
         <CardContent >
           <Typography variant='h5' color="#bbdefb" >Total Amount</Typography>
@@ -80,8 +80,10 @@ export default function Statistics() {
                 bottom: 0,
               }}
             >
+              <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" stroke="#ffffff" />
               <YAxis stroke="#ffffff" />
+              <Tooltip />
               <Area type="monotone" dataKey="amt" stroke="#ffffff" fill="#ffffff" />
             </AreaChart>
           </ResponsiveContainer>

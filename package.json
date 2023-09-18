@@ -21,6 +21,7 @@
     "@mui/x-date-pickers": "^6.13.0",
     "axios": "^1.5.0",
     "dayjs": "^1.11.9",
+    "mui-color-input": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^2.8.0",
