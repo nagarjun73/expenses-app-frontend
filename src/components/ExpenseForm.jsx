@@ -74,7 +74,6 @@ export default function ExpenseForm() {
         }
         return acc;
       }, {});
-      console.log(errors);
       setErrors(errors)
     }
   }
@@ -116,6 +115,7 @@ export default function ExpenseForm() {
 
           <Textarea minRows={2} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Add description...." />
           {errors.description && <FormHelperText error>{errors.description}</FormHelperText>}
+
           {Object.keys(exp.editExp).length == 0 ?
             <Button type="submit" variant="contained">Add Expense</Button> :
             <Button type="submit" variant="contained">update Expense</Button>

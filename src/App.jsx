@@ -1,11 +1,14 @@
 import { useEffect, useReducer, useContext, createContext } from 'react'
+import './App.css'
 import CategoryContainer from './components/CategoryContainer'
 import Statistics from './components/Statistics'
 import ExpenseContainer from './components/ExpenseContainer'
 import Graph from './components/Graph'
 import axios from 'axios'
 import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
+import { Typography, AppBar, Toolbar } from '@mui/material'
+import '@fontsource/roboto/500.css';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 export const CategoryContext = createContext()
 export const ExpenseContext = createContext()
@@ -110,7 +113,11 @@ function App() {
       <CategoryContext.Provider value={{ cat, catDispatch }}>
         <ExpenseContext.Provider value={{ exp, expDispatch }}>
           <Stack spacing={5}>
-            <Typography variant="h2" sx={{ display: "flex", justifyContent: "center" }}>Expense App</Typography>
+            <AppBar position="fixed" sx={{ height: "10vh", backgroundColor: "white", display: "flex", justifyContent: "center", }}>
+              <Toolbar variant="dense">
+                <Typography variant="h3" sx={{ color: 'primary.main', fontSize: '42px' }}> <AccountBalanceWalletIcon />xpense</Typography>
+              </Toolbar>
+            </AppBar>
             <Statistics />
             <CategoryContainer />
             <ExpenseContainer />
