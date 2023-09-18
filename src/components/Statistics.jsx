@@ -6,6 +6,7 @@ import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 export default function Statistics() {
   const [totalAmt, setTotalAmt] = useState(0)
   const [mostSpent, setMostSpent] = useState('')
+  const [data, setData] = useState([])
 
   const { exp, expDispatch } = useContext(ExpenseContext)
   const { cat, catDispatch } = useContext(CategoryContext)
@@ -31,31 +32,29 @@ export default function Statistics() {
       const vls = Object.values(mstSpntObj)
       const mostSpend = Object.keys(mstSpntObj).find((ele) => mstSpntObj[ele] == Math.max(...vls))
       setMostSpent(mostSpend)
+
+      const monthlySorted = exp.expenses.sort((a, b) => new Date(a.expenseDate) - new Date(b.expenseDate))
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      const monthObj = monthlySorted.reduce((acc, item) => {
+        const monthName = months[new Date(item.expenseDate).getMonth()]
+        if (acc.hasOwnProperty(monthName)) {
+          acc[monthName] += item.amount
+        } else {
+          acc[monthName] = item.amount
+        }
+        return acc
+      }, {})
+      const data = Object.keys(monthObj).map((key) => {
+        return { name: key, amt: monthObj[key] }
+      })
+      console.log(data)
+      setData(data.slice(-3, data.length))
     }
   }, [exp.expenses])
 
-  const data = [
-    {
-      name: 'aug',
-      amt: 1000,
-    },
-    {
-      name: 'sep',
-      amt: 2500,
-    },
-    {
-      name: 'oct',
-      amt: 3000,
-    },
-    {
-      name: 'nov',
-      amt: 3500,
-    },
-  ];
-
   return (
     <Stack direction='row' justifyContent={'space-evenly'} sx={{ paddingTop: "10vh", width: '75vw' }}>
-      <Card sx={{ backgroundColor: 'primary.main', borderRadius: '10px', width: '20vw' }}>
+      <Card sx={{ backgroundColor: 'primary.main', borderRadius: '10px', width: '20vw', }}>
         <CardContent >
           <Typography variant='h5' color="#bbdefb" >Total Amount</Typography>
           <Typography variant='h3' color="#ffffff">{totalAmt}</Typography>

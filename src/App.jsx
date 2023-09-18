@@ -90,7 +90,6 @@ function App() {
       return axios.get(`http://localhost:3077/api/${ele}`)
         .then((res) => {
           return res.data
-          // catDispatch({type:"FETCH_CATEGORIES", payload:res.data})
         })
         .catch((err) => {
           console.log(err)
