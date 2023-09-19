@@ -1,7 +1,3 @@
-[expense-app-backend](https://github.com/nagarjun73/expenses-app-backend)
-
-
-
 Expenses App 
 This is the frontend repository for an Expenses App, which is a web application designed to manage and track expenses. This repository is intended to work in conjunction with the backend repository, which can be found here. [expense-app-backend](https://github.com/nagarjun73/expenses-app-backend)
 
