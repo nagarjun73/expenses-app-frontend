@@ -27,19 +27,20 @@ Copy code
 cd expenses-app-frontend
 Install dependencies:
 
-bash
-Copy code
+Clone the repository:
+git clone https://github.com/nagarjun73/expenses-app-frontend.git
+
+Change to the project directory:
+cd expenses-app-frontend
+
+Install dependencies:
 npm install
+
 Usage
 To run the Expenses App frontend, use the following command:
-
-bash
-Copy code
 npm start
-This will start the development server, and you can access the app at http://localhost:3000.
 
-Dependencies
-The Expenses App frontend relies on the following main dependencies:
+This will start the development server, and you can access the app at http://localhost:3000.
 
 React: A JavaScript library for building user interfaces.
 dependencies: 
